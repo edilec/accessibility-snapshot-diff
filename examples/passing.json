@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1",
+  "complete": true,
+  "baseline": { "complete": true, "nodes": [
+    { "id": "root", "parentId": null, "role": "main", "name": "" },
+    { "id": "title", "parentId": "root", "role": "heading", "name": "Overview", "level": 2 },
+    { "id": "count", "parentId": "root", "role": "status", "name": "3 items" }
+  ] },
+  "current": { "complete": true, "nodes": [
+    { "id": "root", "parentId": null, "role": "main", "name": "" },
+    { "id": "title", "parentId": "root", "role": "heading", "name": "Overview", "level": 2 },
+    { "id": "count", "parentId": "root", "role": "status", "name": "4 items" }
+  ] },
+  "policy": { "ignoreNameIds": ["count"] }
+}
