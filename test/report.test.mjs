@@ -19,6 +19,17 @@ test('lost accessible button name and changed heading level have located structu
   assert.deepEqual(r.changes.map(x => x.currentOrdinal), [1, 2]);
   assert.equal(JSON.stringify(r).includes('Overview'), false);
 });
+test('bidi-format-only current name is a removed accessible name', () => {
+  const changed = [base[0], base[1], node('button', 'button', '\u200e', 'main'), base[3]];
+  const r = diffSnapshots(doc(base, changed));
+  assert.equal(r.status, 'fail');
+  assert.equal(r.changes[0].kind, 'name-removed');
+  assert.equal(JSON.stringify(r).includes('\u200e'), false);
+});
+test('joiner inside visible emoji text remains a usable matching name', () => {
+  const heading = node('people', 'heading', 'Meet 👩‍💻 developers', null, 2);
+  assert.equal(diffSnapshots(doc([heading], [heading])).status, 'pass');
+});
 test('explicit dynamic-count name ignore passes, but never hides a removed node', () => {
   const changed = [base[0], base[1], base[2], node('count', 'status', '4 items', 'main')];
   assert.equal(diffSnapshots(doc(base, changed)).status, 'fail');

@@ -8,6 +8,10 @@ const UNKNOWN = new Set(['input-unreadable', 'input-invalid', 'duplicate-key', '
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v) && Object.getPrototypeOf(v) === Object.prototype;
 const order = (a, b) => a < b ? -1 : a > b ? 1 : 0;
 const id = v => typeof v === 'string' && v.length > 0 && v.length <= 128 && !/[\u0000-\u001f\u007f-\u009f\u200e\u200f\u202a-\u202e\u2066-\u2069]/u.test(v);
+const renderedName = value => {
+  const text = value.replace(/[\u0000-\u001f\u007f-\u009f\u00ad\u200b\u200e\u200f\u202a-\u202e\u2060\u2066-\u2069\ufeff]/gu, '').trim();
+  return /[\p{L}\p{N}\p{P}\p{S}]/u.test(text) ? text : '';
+};
 function finding(ruleId, pointer = '') {
   if (!Object.hasOwn(RULE_SEVERITY, ruleId)) throw new Error('Unknown rule');
   return { ruleId, severity: RULE_SEVERITY[ruleId], message: {
@@ -82,7 +86,8 @@ export function diffSnapshots(document, { now = Date.now } = {}) {
     if (node.role !== next.role) add('role-changed', i, j, pointer);
     if (node.parentId !== next.parentId) add('parent-changed', i, j, pointer);
     if (node.role === 'heading' && next.role === 'heading' && node.level !== next.level) add('heading-level-changed', i, j, pointer);
-    if (!ignored.has(node.id) && node.name !== next.name) add(node.name && !next.name ? 'name-removed' : !node.name && next.name ? 'name-added' : 'name-changed', i, j, pointer);
+    const oldName = renderedName(node.name), newName = renderedName(next.name);
+    if (!ignored.has(node.id) && oldName !== newName) add(oldName && !newName ? 'name-removed' : !oldName && newName ? 'name-added' : 'name-changed', i, j, pointer);
   }
   for (const [i, node] of document.current.nodes.entries()) {
     if (expired()) return incomplete('time-limit');
