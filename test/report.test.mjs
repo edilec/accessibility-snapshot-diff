@@ -30,6 +30,11 @@ test('joiner inside visible emoji text remains a usable matching name', () => {
   const heading = node('people', 'heading', 'Meet 👩‍💻 developers', null, 2);
   assert.equal(diffSnapshots(doc([heading], [heading])).status, 'pass');
 });
+test('line break between words preserves a matching accessible name', () => {
+  const changed = [base[0], base[1], node('button', 'button', 'Save\nnow', 'main'), base[3]];
+  const before = [base[0], base[1], node('button', 'button', 'Save now', 'main'), base[3]];
+  assert.equal(diffSnapshots(doc(before, changed)).status, 'pass');
+});
 test('explicit dynamic-count name ignore passes, but never hides a removed node', () => {
   const changed = [base[0], base[1], base[2], node('count', 'status', '4 items', 'main')];
   assert.equal(diffSnapshots(doc(base, changed)).status, 'fail');

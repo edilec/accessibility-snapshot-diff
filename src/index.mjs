@@ -9,7 +9,9 @@ const object = v => v !== null && typeof v === 'object' && !Array.isArray(v) && 
 const order = (a, b) => a < b ? -1 : a > b ? 1 : 0;
 const id = v => typeof v === 'string' && v.length > 0 && v.length <= 128 && !/[\u0000-\u001f\u007f-\u009f\u200e\u200f\u202a-\u202e\u2066-\u2069]/u.test(v);
 const renderedName = value => {
-  const text = value.replace(/[\u0000-\u001f\u007f-\u009f\u00ad\u200b\u200e\u200f\u202a-\u202e\u2060\u2066-\u2069\ufeff]/gu, '').trim();
+  const text = value.replace(/[\u0000-\u001f\u007f-\u009f]/gu, character => /\s/u.test(character) ? ' ' : '')
+    .replace(/[\u00ad\u200b\u200e\u200f\u202a-\u202e\u2060\u2066-\u2069\ufeff]/gu, '')
+    .replace(/\s+/gu, ' ').trim();
   return /[\p{L}\p{N}\p{P}\p{S}]/u.test(text) ? text : '';
 };
 function finding(ruleId, pointer = '') {
