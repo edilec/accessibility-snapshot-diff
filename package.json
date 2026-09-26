@@ -1,0 +1,22 @@
+{
+  "name": "accessibility-snapshot-diff",
+  "version": "0.1.0",
+  "description": "Compare accessibility snapshots for regressions in rendered routes.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lint": "node --check src/index.mjs && node --check bin/accessibility-snapshot-diff.mjs",
+    "test": "node --test",
+    "check": "npm run lint && npm test"
+  },
+  "bin": {
+    "accessibility-snapshot-diff": "./bin/accessibility-snapshot-diff.mjs"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edilec/accessibility-snapshot-diff"
+  }
+}
