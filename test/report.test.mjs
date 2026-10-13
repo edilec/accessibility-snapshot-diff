@@ -9,7 +9,7 @@ import { diffSnapshots, LIMITS, parseStrictJson } from '../src/index.mjs';
 const node = (id, role, name, parentId = null, level) => ({ id, parentId, role, name, ...(level === undefined ? {} : { level }) });
 const base = [node('main', 'main', ''), node('heading', 'heading', 'Overview', 'main', 2), node('button', 'button', 'Save', 'main'), node('count', 'status', '3 items', 'main')];
 const doc = (before = base, after = base, ignoreNameIds = []) => ({ schemaVersion: '1', complete: true, baseline: { complete: true, nodes: before.map(x => ({ ...x })) }, current: { complete: true, nodes: after.map(x => ({ ...x })) }, policy: { ignoreNameIds: [...ignoreNameIds] } });
-const run = (root, input) => spawnSync(process.execPath, ['bin/accessibility-snapshot-diff.mjs', '--root', root, '--input', input], { cwd: new URL('..', import.meta.url), encoding: 'utf8', env: { ...process.env, NODE_OPTIONS: `--import=${new URL('../../migration-plan-template/support/deny-network.mjs', import.meta.url).href}` } });
+const run = (root, input) => spawnSync(process.execPath, ['bin/accessibility-snapshot-diff.mjs', '--root', root, '--input', input], { cwd: new URL('..', import.meta.url), encoding: 'utf8', env: { ...process.env, NODE_OPTIONS: `--import=${new URL('./deny-network.mjs', import.meta.url).href}` } });
 
 test('good identical exported accessibility trees pass', () => { const r = diffSnapshots(doc()); assert.equal(r.status, 'pass'); assert.equal(r.summary.checked, 4); assert.deepEqual(r.changes, []); });
 test('lost accessible button name and changed heading level have located structural diffs', () => {
